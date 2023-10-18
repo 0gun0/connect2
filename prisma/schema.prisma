@@ -6,7 +6,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://root:aaaa4321@express-database.cuvnztwfdcy0.ap-northeast-2.rds.amazonaws.com:3306/community-hub"
 }
 
 

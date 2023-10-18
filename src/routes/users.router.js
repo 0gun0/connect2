@@ -4,7 +4,15 @@ import jwt from 'jsonwebtoken';
 import {prisma} from '../utils/prisma/index.js';
 
 
-const router = express.Router(); 
+const router = express.Router();
+const cors = require('cors');
+
+// CORS 옵션 설정; 
+let corsOptions = {
+    origin: '*',      // 출처 허용 옵션
+    credential: true, // 사용자 인증이 필요한 리소스(쿠키 등) 접근
+}
+app.use(cors(corsOptions))
 
 /** 사용자 회원가입 API **/
 
