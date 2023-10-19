@@ -3,11 +3,11 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {prisma} from '../utils/prisma/index.js';
-// import cors from 'cors'; ES6 모듈 스타일, commonjs스타일... 
+
+// ES6 모듈 스타일, commonjs스타일... 
 
 const router = express.Router();
 
-// app.use(cors());
 
 // CORS 옵션 설정; 
 // let corsOptions = {
