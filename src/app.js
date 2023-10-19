@@ -12,7 +12,7 @@ const app = express();
 const PORT = 3018;
 
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); //순서바꿈
 app.use(cookieParser());
 app.use('/api', [UsersRouter]);
 

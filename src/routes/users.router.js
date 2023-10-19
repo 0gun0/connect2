@@ -9,6 +9,10 @@ import {prisma} from '../utils/prisma/index.js';
 const router = express.Router();
 
 
+
+
+// app.use(cors());
+
 // CORS 옵션 설정; 
 // let corsOptions = {
 //     origin: '*',      // 출처 허용 옵션
@@ -42,7 +46,10 @@ const user = await prisma.users.create({
 const userInfo = await prisma.userInfos.create({
     data:{
         UserId: user.userId,
-        name
+        name,
+        age,
+        gender : gender.toUpperCase(),
+        profileImage,
     }
 })
 return res.status(201).json({message:'회원가입이 완료되었습니다.'})
