@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {prisma} from '../utils/prisma/index.js';
 
-// ES6 모듈 스타일, commonjs스타일... 
+// ES6 모듈 스타일, commonjs스타일... -> app.js에서 
 
 const router = express.Router();
 
@@ -20,8 +20,8 @@ const router = express.Router();
 
 router.post('/sign-up', async(req, res, next)=>{
 
-// 1. `email`, `password`, `name`, `age`, `gender`, `profileImage`를 **body**로 전달받습니다.
-const {email, password, name, age, gender, profileImage} = req.body;
+// 1. `email`, `password`, `name`, 를 **body**로 전달받습니다.
+const {email, password, name} = req.body;
 // 2. 동일한 `email`을 가진 사용자가 있는지 확인합니다.
 const isExistUser = await prisma.users.findFirst({
     where: {email},
@@ -38,14 +38,11 @@ const user = await prisma.users.create({
         password: hashedPassword,
     }
 })
-// 4. **UserInfos** 테이블에 `name`, `age`, `gender`, `profileImage`를 이용해 사용자 정보를 생성합니다.
+// 4. **UserInfos** 테이블에 `name`, `age` 를 이용해 사용자 정보를 생성합니다.
 const userInfo = await prisma.userInfos.create({
     data:{
         UserId: user.userId,
         name,
-        age,
-        gender : gender.toUpperCase(),
-        profileImage,
     }
 })
 return res.status(201).json({message:'회원가입이 완료되었습니다.'})
