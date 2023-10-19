@@ -24,6 +24,22 @@ model Users {
   @@map("Users")
 }
 
+model UserInfos {
+  userInfoId   Int      @id @default(autoincrement()) @map("userInfoId")
+  UserId       Int      @unique @map("UserId") // 사용자(Users) 테이블을 참조하는 외래키
+  name         String   @map("name")
+  age          Int?     @map("age")
+  gender       String?   @map("gender")
+  profileImage String?  @map("profileImage")
+  createdAt    DateTime @default(now()) @map("createdAt")
+  updatedAt    DateTime @updatedAt @map("updatedAt")
+
+  // Users 테이블과 관계를 설정합니다.
+  User Users @relation(fields: [UserId], references: [userId], onDelete: Cascade)
+
+  @@map("UserInfos")
+}
+
 model Posts {
   postId    Int      @id @default(autoincrement()) @map("postId")
   UserId    Int      @map("UserId") // 사용자(Users) 테이블을 참조하는 외래키
@@ -37,22 +53,6 @@ model Posts {
   Comments Comments[] // 게시글(Posts) 테이블과 댓글(Comments) 테이블이 1:N 관계를 맺습니다.
 
   @@map("Posts")
-}
-
-model UserInfos {
-  userInfoId   Int      @id @default(autoincrement()) @map("userInfoId")
-  UserId       Int      @unique @map("UserId") // 사용자(Users) 테이블을 참조하는 외래키
-  name         String   @map("name")
-  age          Int?     @map("age")
-  gender       String   @map("gender")
-  profileImage String?  @map("profileImage")
-  createdAt    DateTime @default(now()) @map("createdAt")
-  updatedAt    DateTime @updatedAt @map("updatedAt")
-
-  // Users 테이블과 관계를 설정합니다.
-  User Users @relation(fields: [UserId], references: [userId], onDelete: Cascade)
-
-  @@map("UserInfos")
 }
 
 model Comments {

@@ -21,7 +21,7 @@ const router = express.Router();
 router.post('/sign-up', async(req, res, next)=>{
 
 // 1. `email`, `password`, `name`, `age`, `gender`, `profileImage`를 **body**로 전달받습니다.
-const {email, password, name, age, gender, profileImage} = req.body;
+const {email, password, name} = req.body;
 // 2. 동일한 `email`을 가진 사용자가 있는지 확인합니다.
 const isExistUser = await prisma.users.findFirst({
     where: {email},
@@ -42,10 +42,7 @@ const user = await prisma.users.create({
 const userInfo = await prisma.userInfos.create({
     data:{
         UserId: user.userId,
-        name,
-        age,
-        gender : gender.toUpperCase(),
-        profileImage,
+        name
     }
 })
 return res.status(201).json({message:'회원가입이 완료되었습니다.'})
