@@ -8,10 +8,7 @@ import {prisma} from '../utils/prisma/index.js';
 
 const router = express.Router();
 
-
-
-
-// app.use(cors());
+// app.use(cors()); -> app.js에서 설정
 
 // CORS 옵션 설정; 
 // let corsOptions = {
@@ -43,12 +40,12 @@ const user = await prisma.users.create({
     }
 })
 // 4. **UserInfos** 테이블에 `name`, `age`, `gender`, `profileImage`를 이용해 사용자 정보를 생성합니다.
-const userInfo = await prisma.userInfos.create({
-    data:{
-        UserId: user.userId,
-        name
-    }
-})
+// const userInfo = await prisma.userInfos.create({
+//     data:{
+//         UserId: user.userId,
+//         name
+//     }
+// }) userInfo 테이블을 비움
 return res.status(201).json({message:'회원가입이 완료되었습니다.'})
 });
 
