@@ -46,10 +46,7 @@ const user = await prisma.users.create({
 const userInfo = await prisma.userInfos.create({
     data:{
         UserId: user.userId,
-        name,
-        age,
-        gender : gender.toUpperCase(),
-        profileImage,
+        name
     }
 })
 return res.status(201).json({message:'회원가입이 완료되었습니다.'})
