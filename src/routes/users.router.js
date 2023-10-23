@@ -57,6 +57,7 @@ router.post('/sign-in', async (req, res, next)=>{
     const {email, password} = req.body;
 
 const user = await prisma.users.findFirst({where: {email}});
+// 입력받은 사용자의 비밀번호와 데이터베이스에 저장된 비밀번호를 비교
 if (!user){
     return res.status(401).json({message : '존재하지 않는 이메일입니다.'});
 }
@@ -64,6 +65,7 @@ const result = await bcrypt.compare(password, user.password);
 if(!result){
     return res.status(401).json({message : '비밀번호가 일치하지 않습니다.'})
 }
+//로그인에 성공하면, 사용자의 userid를 바탕으로 토큰을 생성.
 const token = jwt.sign(
     {
         userId: user.userId,
@@ -71,9 +73,21 @@ const token = jwt.sign(
     'customized_secret_key',
 )
 res.cookie('authorization',`Bearer ${token}`);
-
+//쿠키에 Bearer토큰 형식으로 JWT를 저장합니다.
 return res.status(200).json({message : '로그인 성공'});
 })
+
+/** 로그아웃 API */ 
+router.post('/log-out', (req, res) => {
+    // 클라이언트로부터 JWT 토큰을 받아옵니다.
+    const token = req.cookies.authorization.replace('Bearer ', ''); // 쿠키에서 JWT 추출
+    // 토큰을 블랙리스트에 추가하여 무효화시킨다.
+    const blacklistedTokens = []; // 블랙리스트 배열
+    blacklistedTokens.push(token); // 블랙리스트에 토큰 추가
+    res.clearCookie('authorization'); // 클라이언트 쿠키 제거. 'authorization'라는 이름의 쿠키를 클라이언트에서 제거
+    res.status(200).json({ message: '로그아웃 성공' });
+});
+
 
 export default router;
 
