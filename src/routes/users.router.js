@@ -37,6 +37,7 @@ const user = await prisma.users.create({
     data: {
         email, 
         password: hashedPassword,
+        name
     }
 })
 // 4. **UserInfos** 테이블에 `name`, `age`, `gender`, `profileImage`를 이용해 사용자 정보를 생성합니다.
