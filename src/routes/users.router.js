@@ -72,7 +72,7 @@ const token = jwt.sign(
 )
 res.cookie('authorization',`Bearer ${token}`);
 //쿠키에 Bearer토큰 형식으로 JWT를 저장합니다.
-return res.status(200).json({message : '로그인 성공'});
+return res.status(200).json({message:"로그인성공",token:token}); 
 })
 
 /** 로그아웃 API */ 
@@ -80,14 +80,15 @@ return res.status(200).json({message : '로그인 성공'});
 router.post('/log-out', (req, res, next) => {
     try {
         // 클라이언트로부터 JWT 토큰을 받아옵니다.
-        const token = req.cookies.authorization.replace('Bearer ', ''); // 쿠키에서 JWT 추출
+        const token = req.headers.authorization.replace('Bearer ', ''); // 프론트에서 req.headers.authorization을 받음
         // 토큰을 블랙리스트에 추가하여 무효화시킨다.
         const blacklistedTokens = []; 
         blacklistedTokens.push(token); // 푸쉬, 블랙리스트에 토큰 추가
-        res.clearCookie('authorization'); // 클라이언트 쿠키 제거. 'authorization'라는 이름의 쿠키를 클라이언트에서 제거
+        // res.clearCookie('authorization'); // 클라이언트 쿠키 제거. 'authorization'라는 이름의 쿠키를 클라이언트에서 제거
         res.status(200).json({ message: '로그아웃 성공' });
     } catch (error) {
         // 오류가 발생한 경우 에러 응답을 보냅니다.
+        console.log(error);
         res.status(500).json({ error: '로그아웃 중 오류가 발생했습니다.' });
     }
 });
