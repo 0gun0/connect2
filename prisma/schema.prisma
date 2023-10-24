@@ -18,7 +18,7 @@ model Users {
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt @map("updatedAt")
 
-  room_reservation_list   room_reservation_list[] // room_reservation 테이블과 1:N 관계를 맺습니다. 받는값.
+
 
   @@map("Users")
 }
