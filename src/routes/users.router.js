@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {prisma} from '../utils/prisma/index.js';
 
+
 // ES6 모듈 스타일, commonjs스타일... 
 
 const router = express.Router();
@@ -50,30 +51,39 @@ const user = await prisma.users.create({
 return res.status(201).json({message:'회원가입이 완료되었습니다.'})
 });
 
-/** 사용자 로그인 API **/
-router.post('/sign-in', async (req, res, next)=>{
-    const {email, password} = req.body;
+//리팩토링
+// 로그인API
 
-const user = await prisma.users.findFirst({where: {email}});
-// 입력받은 사용자의 비밀번호와 데이터베이스에 저장된 비밀번호를 비교
-if (!user){
-    return res.status(401).json({message : '존재하지 않는 이메일입니다.'});
-}
-const result = await bcrypt.compare(password, user.password);
-if(!result){
-    return res.status(401).json({message : '비밀번호가 일치하지 않습니다.'})
-}
-//로그인에 성공하면, 사용자의 userid를 바탕으로 토큰을 생성.
-const token = jwt.sign(
+router.post('/sign-in', async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const user = await prisma.users.findFirst({ where: { email } });
+
+  if (!user) {
+    return res.status(401).json({ message: '존재하지 않는 이메일입니다.' });
+  }
+
+  const result = await bcrypt.compare(password, user.password);
+
+  if (!result) {
+    return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
+  }
+
+  // 시크릿 키를 환경 변수에서 가져옵니다.
+  const secretKey = process.env.SECRET_KEY || 'default-secret-key';
+
+  const token = jwt.sign(
     {
-        userId: user.userId,
+      userId: user.userId,
     },
-    'customized_secret_key',
-)
-res.cookie('authorization',`Bearer ${token}`);
-//쿠키에 Bearer토큰 형식으로 JWT를 저장합니다.
-return res.status(200).json({message:"로그인성공",token:token}); 
-})
+    secretKey // 환경 변수에서 가져온 시크릿 키를 사용
+  );
+
+  res.cookie('authorization', `Bearer ${token}`);
+
+  return res.status(200).json({ message: '로그인 성공', token: token });
+});
+
 
 /** 로그아웃 API */ 
 
